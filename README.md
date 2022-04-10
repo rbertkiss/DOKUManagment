@@ -14,7 +14,7 @@
 </tr>
 <tr>
 <td>Képek elérése:</td>
-<td>GoogleDrive tárhelyről</td>
+<td>GoogleDrive</td>
 </tr>
 </table>
 
