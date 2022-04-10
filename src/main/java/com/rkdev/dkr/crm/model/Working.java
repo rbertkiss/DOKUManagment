@@ -7,21 +7,21 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-public class Working implements Serializable, Cloneable{
+public class Working implements Serializable, Cloneable {
 
     @Id
     @GeneratedValue
     private Long id;
     private Long ids;
 
-    private String munkahelyneve="";
-    private String beosztas="";
-    private String osszefoglalas="";
-    private String kezdeseve="";
-    private String zaraseve="";
+    private String munkahelyneve = "";
+    private String beosztas = "";
+    private String osszefoglalas = "";
+    private String kezdeseve = "";
+    private String zaraseve = "";
     private String rogzitesdatuma;
 
-    public Working(){
+    public Working() {
 
     }
 

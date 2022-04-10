@@ -25,11 +25,11 @@ public class LanguageEditor extends VerticalLayout implements KeyNotifier {
     ComboBox<String> nyelviszint = new ComboBox<String>("Nyelvi szint:");
 
     Button add = new Button("Mentés", VaadinIcon.PLUS.create());
-    Button del = new Button("Törlés",VaadinIcon.TRASH.create());
-    Button exit = new Button("Vissza",VaadinIcon.LEVEL_LEFT.create());
+    Button del = new Button("Törlés", VaadinIcon.TRASH.create());
+    Button exit = new Button("Vissza", VaadinIcon.LEVEL_LEFT.create());
     PersonEditor personEditor;
 
-    HorizontalLayout actions = new HorizontalLayout(add, del,exit);
+    HorizontalLayout actions = new HorizontalLayout(add, del, exit);
     Dialog nyelvicomp = new Dialog();
     Binder<Language> binder = new Binder<>(Language.class);
 
@@ -39,16 +39,16 @@ public class LanguageEditor extends VerticalLayout implements KeyNotifier {
     @Autowired
     public LanguageEditor(LanguageRepository languageRepository) {
         this.languageRepository = languageRepository;
-        nyelviszint.setItems("A1","A2","B1","B2","C1","C2");
+        nyelviszint.setItems("A1", "A2", "B1", "B2", "C1", "C2");
         nyelv.setItems(
-                "Magyar","Angol","Német","Francia","Olasz", "Román",
-                "Ukrán","Orosz","Arab","Kínai","Lengyel","Dán");
+                "Magyar", "Angol", "Német", "Francia", "Olasz", "Román",
+                "Ukrán", "Orosz", "Arab", "Kínai", "Lengyel", "Dán");
 
         nyelvicomp.setWidth("700px");
         nyelvicomp.setHeight("300px");
         nyelv.setWidth("400px");
-        nyelvicomp.add(new VerticalLayout( new H3("Nyelvi képességek hozzáadása / módosítása"),
-                new HorizontalLayout(nyelv,nyelviszint),actions));
+        nyelvicomp.add(new VerticalLayout(new H3("Nyelvi képességek hozzáadása / módosítása"),
+                new HorizontalLayout(nyelv, nyelviszint), actions));
         binder.bindInstanceFields(this);
 
         setSpacing(true);
@@ -74,10 +74,11 @@ public class LanguageEditor extends VerticalLayout implements KeyNotifier {
             deletedialog.open();
         });
 
-        exit.addClickListener(e->{
+        exit.addClickListener(e -> {
             nyelvicomp.close();
         });
     }
+
     public void save() {
         languageRepository.save(language);
         changeHandler.onChange();
@@ -105,7 +106,11 @@ public class LanguageEditor extends VerticalLayout implements KeyNotifier {
     }
 
 
+    public void setChangeHandler(ChangeHandler h) {
+        changeHandler = h;
+    }
 
-    public void setChangeHandler(ChangeHandler h) { changeHandler = h; }
-    public interface ChangeHandler {  void onChange(); }
+    public interface ChangeHandler {
+        void onChange();
+    }
 }

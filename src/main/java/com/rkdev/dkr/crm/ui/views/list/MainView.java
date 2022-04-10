@@ -28,12 +28,11 @@ public class MainView extends VerticalLayout {
     final TextField filter;
     private final Button addNewButton;
     private final Button refreshButton;
-
+    Dialog diag = new Dialog(new H4("A szűrőfeltétel alapján nem található személy a rendszerben!"));
     private PersonEditor personEditor;
     private PersonRepository personRepository;
     private PersonEditor languageEditor;
     private LanguageRepository languageRepository;
-    Dialog diag = new Dialog(new H4("A szűrőfeltétel alapján nem található személy a rendszerben!"));
 
 
     public MainView(PersonEditor personEditor, PersonRepository personRepository) {
@@ -42,7 +41,7 @@ public class MainView extends VerticalLayout {
         this.grid = new Grid<>(Person.class);
         this.filter = new TextField();
         this.addNewButton = new Button("Új önéletrajz hozzáadása", VaadinIcon.PLUS.create());
-        this.refreshButton = new Button("Frissités",VaadinIcon.REFRESH.create());
+        this.refreshButton = new Button("Frissités", VaadinIcon.REFRESH.create());
 
 
         HorizontalLayout actions = new HorizontalLayout(filter, addNewButton, refreshButton);
@@ -50,7 +49,7 @@ public class MainView extends VerticalLayout {
         add(actions, grid, personEditor);
         filter.setPlaceholder("Szűrés....");
         grid.setHeight("780px");
-        grid.setColumns("vezeteknev", "keresztnev", "emailcim", "telefonszam","szuletesidatum","telepules","rogzitesdatuma");
+        grid.setColumns("vezeteknev", "keresztnev", "emailcim", "telefonszam", "szuletesidatum", "telepules", "rogzitesdatuma");
         grid.setItems(personRepository.findAll());
 
         filter.setWidth("400px");
@@ -74,7 +73,7 @@ public class MainView extends VerticalLayout {
             filterBy(filter.getValue());
         });
 
-        refreshButton.addClickListener(e->grid.setItems(personRepository.findAll()));
+        refreshButton.addClickListener(e -> grid.setItems(personRepository.findAll()));
 
     }
 
@@ -89,13 +88,13 @@ public class MainView extends VerticalLayout {
             ) {
                 if (
                         textFilter(p.getVezeteknev(), filter) ||
-                        textFilter(p.getKeresztnev(), filter) ||
-                        textFilter(p.getId().toString(), filter) ||
+                                textFilter(p.getKeresztnev(), filter) ||
+                                textFilter(p.getId().toString(), filter) ||
                                 textFilter(p.getTelepules(), filter)) {
                     filtered.add(p);
                 }
             }
-            if(filtered.isEmpty()){
+            if (filtered.isEmpty()) {
                 diag.open();
                 return null;
 

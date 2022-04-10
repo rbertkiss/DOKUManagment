@@ -13,14 +13,14 @@ public class School implements Serializable, Cloneable {
     @GeneratedValue
     private Long id;
     private Long ids;
-    private String iskolaneve="";
-    private String kepzetseg="";
-    private String szakirany="";
-    private String kezdeseve="";
-    private String vegzeseve="";
+    private String iskolaneve = "";
+    private String kepzetseg = "";
+    private String szakirany = "";
+    private String kezdeseve = "";
+    private String vegzeseve = "";
     private String rogzitesdatuma;
 
-    public School(){
+    public School() {
 
     }
 

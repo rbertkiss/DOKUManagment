@@ -7,14 +7,14 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-public class Language implements Serializable, Cloneable{
+public class Language implements Serializable, Cloneable {
 
     @Id
     @GeneratedValue
     private Long id;
     private Long ids;
-    private String nyelv="";
-    private String nyelviszint ="";
+    private String nyelv = "";
+    private String nyelviszint = "";
 
     public Language(Long ids, String nyelv, String nyelviszint) {
         this.ids = ids;
@@ -63,7 +63,7 @@ public class Language implements Serializable, Cloneable{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Language language = (Language) o;
-        return  Objects.equals(id, language.id) &&
+        return Objects.equals(id, language.id) &&
                 Objects.equals(ids, language.ids) &&
                 Objects.equals(nyelv, language.nyelv) &&
                 Objects.equals(nyelviszint, language.nyelviszint);
@@ -82,5 +82,15 @@ public class Language implements Serializable, Cloneable{
                 ", nyelv='" + nyelv + '\'' +
                 ", nyelvi_szint='" + nyelviszint + '\'' +
                 '}';
+    }
+
+    @Override
+    public Language clone() {
+        try {
+            Language clone = (Language) super.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

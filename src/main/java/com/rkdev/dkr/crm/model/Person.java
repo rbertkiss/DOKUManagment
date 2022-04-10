@@ -151,12 +151,12 @@ public class Person implements Serializable, Cloneable {
         this.motivacioslevel = motivacioslevel;
     }
 
-    public void setRogzitesdatuma(String rogzitesdatuma) {
-        this.rogzitesdatuma = rogzitesdatuma;
-    }
-
     public String getRogzitesdatuma() {
         return rogzitesdatuma;
+    }
+
+    public void setRogzitesdatuma(String rogzitesdatuma) {
+        this.rogzitesdatuma = rogzitesdatuma;
     }
 
     @Override

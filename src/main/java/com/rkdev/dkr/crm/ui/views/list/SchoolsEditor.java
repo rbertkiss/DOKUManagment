@@ -29,11 +29,11 @@ public class SchoolsEditor extends VerticalLayout implements KeyNotifier {
     TextField vegzeseve = new TextField("Befejezés éve:");
 
     Button add = new Button("Mentés", VaadinIcon.PLUS.create());
-    Button del = new Button("Törlés",VaadinIcon.TRASH.create());
-    Button exit = new Button("Vissza",VaadinIcon.LEVEL_LEFT.create());
+    Button del = new Button("Törlés", VaadinIcon.TRASH.create());
+    Button exit = new Button("Vissza", VaadinIcon.LEVEL_LEFT.create());
     PersonEditor personEditor;
 
-    HorizontalLayout actions = new HorizontalLayout(add, del,exit);
+    HorizontalLayout actions = new HorizontalLayout(add, del, exit);
     Dialog sccomp = new Dialog();
     Binder<School> binder = new Binder<>(School.class);
 
@@ -44,12 +44,12 @@ public class SchoolsEditor extends VerticalLayout implements KeyNotifier {
     public SchoolsEditor(SchoolRepository schoolRepository) {
         this.schoolRepository = schoolRepository;
         iskolaneve.setWidth("400px");
-        kepzetseg.setItems("Általános Iskola", "Középiskola", "Szakiskola","Felsőoktatási szakképzés","Egyetemi alapképesítés(BA/BSc)","Egyetemi mesterképzés(MA/MSc)","Doktori Iskola (PHD)" );
+        kepzetseg.setItems("Általános Iskola", "Középiskola", "Szakiskola", "Felsőoktatási szakképzés", "Egyetemi alapképesítés(BA/BSc)", "Egyetemi mesterképzés(MA/MSc)", "Doktori Iskola (PHD)");
         sccomp.setWidth("700px");
         sccomp.setHeight("400px");
-        sccomp.add(new VerticalLayout( new H3("Tanulmányi adatok hozzáadása / módosítása"),
-                new HorizontalLayout(iskolaneve,kepzetseg),
-                new HorizontalLayout(szakirany, kezdeseve,vegzeseve),actions));
+        sccomp.add(new VerticalLayout(new H3("Tanulmányi adatok hozzáadása / módosítása"),
+                new HorizontalLayout(iskolaneve, kepzetseg),
+                new HorizontalLayout(szakirany, kezdeseve, vegzeseve), actions));
         binder.bindInstanceFields(this);
 
         setSpacing(true);
@@ -75,7 +75,7 @@ public class SchoolsEditor extends VerticalLayout implements KeyNotifier {
             deletedialog.open();
         });
 
-        exit.addClickListener(e->{
+        exit.addClickListener(e -> {
             sccomp.close();
         });
 
@@ -110,10 +110,13 @@ public class SchoolsEditor extends VerticalLayout implements KeyNotifier {
     }
 
 
+    public void setChangeHandler(ChangeHandler h) {
+        changeHandler = h;
+    }
 
-    public void setChangeHandler(ChangeHandler h) { changeHandler = h; }
-    public interface ChangeHandler {  void onChange(); }
-
+    public interface ChangeHandler {
+        void onChange();
+    }
 
 
 }

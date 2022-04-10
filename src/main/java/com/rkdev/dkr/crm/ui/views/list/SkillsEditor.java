@@ -26,11 +26,11 @@ public class SkillsEditor extends VerticalLayout implements KeyNotifier {
     ComboBox<String> tudasszint = new ComboBox<>("Tudásszint:");
 
     Button add = new Button("Mentés", VaadinIcon.PLUS.create());
-    Button del = new Button("Törlés",VaadinIcon.TRASH.create());
-    Button exit = new Button("Vissza",VaadinIcon.LEVEL_LEFT.create());
+    Button del = new Button("Törlés", VaadinIcon.TRASH.create());
+    Button exit = new Button("Vissza", VaadinIcon.LEVEL_LEFT.create());
     PersonEditor personEditor;
 
-    HorizontalLayout actions = new HorizontalLayout(add, del,exit);
+    HorizontalLayout actions = new HorizontalLayout(add, del, exit);
     Dialog scomp = new Dialog();
     Binder<Skills> binder = new Binder<>(Skills.class);
 
@@ -41,11 +41,11 @@ public class SkillsEditor extends VerticalLayout implements KeyNotifier {
     public SkillsEditor(SkillsRepositroy skillsRepositroy) {
         this.skillsRepositroy = skillsRepositroy;
         megnevezes.setWidth("400px");
-        tudasszint.setItems("Kezdő","Középhaladó","Haladó", "Mester");
+        tudasszint.setItems("Kezdő", "Középhaladó", "Haladó", "Mester");
         scomp.setWidth("700px");
         scomp.setHeight("300px");
-        scomp.add(new VerticalLayout( new H3("Skillsek hozzáadása / módosítása"),
-                new HorizontalLayout(megnevezes,tudasszint), actions));
+        scomp.add(new VerticalLayout(new H3("Skillsek hozzáadása / módosítása"),
+                new HorizontalLayout(megnevezes, tudasszint), actions));
         binder.bindInstanceFields(this);
 
         setSpacing(true);
@@ -70,7 +70,7 @@ public class SkillsEditor extends VerticalLayout implements KeyNotifier {
             delete();
             deletedialog.open();
         });
-        exit.addClickListener(e->{
+        exit.addClickListener(e -> {
             scomp.close();
         });
     }
@@ -102,8 +102,12 @@ public class SkillsEditor extends VerticalLayout implements KeyNotifier {
     }
 
 
+    public void setChangeHandler(ChangeHandler h) {
+        changeHandler = h;
+    }
 
-    public void setChangeHandler(ChangeHandler h) { changeHandler = h; }
-    public interface ChangeHandler {  void onChange(); }
+    public interface ChangeHandler {
+        void onChange();
+    }
 
 }

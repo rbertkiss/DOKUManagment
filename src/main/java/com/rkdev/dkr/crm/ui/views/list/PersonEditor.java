@@ -38,6 +38,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
 
 
 @Component
@@ -46,9 +47,6 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier {
 
     //SZEMÉLYES ADATOK
     private final PersonRepository personRepository;
-    private Person person;
-    private ChangeHandler changeHandler;
-    private Long jelenlegiID = null;
     TextField vezeteknev = new TextField("Vezetéknév:");
     TextField keresztnev = new TextField("Keresztnév:");
     TextField szuletesidatum = new TextField("Születési dátum:");
@@ -61,56 +59,50 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier {
     TextField telepules = new TextField("Település:");
     TextField cim = new TextField("Utca, házszám:");
     TextArea motivacioslevel = new TextArea();
-
     //MENÜ
     Button save = new Button("Mentés", VaadinIcon.CHECK.create());
     Button cancel = new Button("Mégse", VaadinIcon.EXIT.create());
     Button delete = new Button("Törlés", VaadinIcon.TRASH.create());
     Button refresh = new Button(VaadinIcon.REFRESH.create());
-    Button refreshW = new Button( VaadinIcon.REFRESH.create());
-    Button refreshS = new Button( VaadinIcon.REFRESH.create());
-    Button refreshSC = new Button( VaadinIcon.REFRESH.create());
-
+    Button refreshW = new Button(VaadinIcon.REFRESH.create());
+    Button refreshS = new Button(VaadinIcon.REFRESH.create());
+    Button refreshSC = new Button(VaadinIcon.REFRESH.create());
     HorizontalLayout actions = new HorizontalLayout(save, delete, cancel);
-
     //MINDEN
     Dialog szemelyesComp = new Dialog();
     Binder<Person> binder = new Binder<>(Person.class);
-
-    //NYELVI DOLGOK
-    private LanguageEditor languageEditor;
-    private LanguageRepository languageRepository;
-    Button nyelvhozz = new Button("Nyelv hozzáadása",VaadinIcon.PLUS.create());
+    Button nyelvhozz = new Button("Nyelv hozzáadása", VaadinIcon.PLUS.create());
     Grid<Language> gridL;
-
-    private Language language;
-    //Dialog diag = new Dialog( new Text("Nincs a rendszerben rögzített adat!"));
-
-    //MUNKAHELY DOLGOK
-    private WorkingEditor workingEditor;
-    private WorkingRepository workingRepository;
-    Button munkahozz = new Button("Munkahely hozzáadása",VaadinIcon.PLUS.create());
+    Button munkahozz = new Button("Munkahely hozzáadása", VaadinIcon.PLUS.create());
     Grid<Working> gridW;
-    private Working working;
-
-    //ISKOLA DOLGOK
-    private SchoolsEditor schoolsEditor;
-    private SchoolRepository schoolRepository;
-    Button schoolhozz = new Button("Iskola hozzáadása",VaadinIcon.PLUS.create());
+    Button schoolhozz = new Button("Iskola hozzáadása", VaadinIcon.PLUS.create());
     Grid<School> gridSC;
-    private School school;
-
-    //SZAKMAI DOLGOK
-    private SkillsEditor skillsEditor;
-    private SkillsRepositroy skillsRepositroy;
-    Button skillhozz = new Button("Skills hozzáadása",VaadinIcon.PLUS.create());
+    Button skillhozz = new Button("Skills hozzáadása", VaadinIcon.PLUS.create());
     Grid<Skills> gridS;
-    private Skills skills;
-
+    //Dialog diag = new Dialog( new Text("Nincs a rendszerben rögzített adat!"));
     //KÉP
     MemoryBuffer buffer = new MemoryBuffer();
     Upload upload = new Upload(buffer);
     Div output = new Div();
+    private Person person;
+    private ChangeHandler changeHandler;
+    private Long jelenlegiID = null;
+    //NYELVI DOLGOK
+    private LanguageEditor languageEditor;
+    private LanguageRepository languageRepository;
+    private Language language;
+    //MUNKAHELY DOLGOK
+    private WorkingEditor workingEditor;
+    private WorkingRepository workingRepository;
+    private Working working;
+    //ISKOLA DOLGOK
+    private SchoolsEditor schoolsEditor;
+    private SchoolRepository schoolRepository;
+    private School school;
+    //SZAKMAI DOLGOK
+    private SkillsEditor skillsEditor;
+    private SkillsRepositroy skillsRepositroy;
+    private Skills skills;
 
     @Autowired
     public PersonEditor(PersonRepository personRepository,
@@ -143,37 +135,36 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier {
         upload.setWidth("750px");
         telefonszam.setValue("+36");
         szemelyesComp.add(new VerticalLayout(
-                new H3("Profilkép feltöltése"),new HorizontalLayout(upload,output),
+                new H3("Profilkép feltöltése"), new HorizontalLayout(upload, output),
                 new H3("Személyes adatok"),
                 new HorizontalLayout(vezeteknev, keresztnev, szuletesihely, szuletesidatum),
                 new HorizontalLayout(neme, emailcim, telefonszam, webhely),
                 new HorizontalLayout(iranyitoszam, telepules, cim),
-                new H3("Nyelvi ismeretek"),new HorizontalLayout(refresh,nyelvhozz), new HorizontalLayout(gridL),
-                new H3("Skills"),new HorizontalLayout(refreshS,skillhozz),new HorizontalLayout(gridS),
-                new H3("Tanulmányok"),new HorizontalLayout(refreshSC,schoolhozz),new HorizontalLayout(gridSC),
-                new H3("Szakmai tapasztalat"),new HorizontalLayout(refreshW,munkahozz),new HorizontalLayout(gridW),
-                new H3("Motivációs levél"),new HorizontalLayout(motivacioslevel),
+                new H3("Nyelvi ismeretek"), new HorizontalLayout(refresh, nyelvhozz), new HorizontalLayout(gridL),
+                new H3("Skills"), new HorizontalLayout(refreshS, skillhozz), new HorizontalLayout(gridS),
+                new H3("Tanulmányok"), new HorizontalLayout(refreshSC, schoolhozz), new HorizontalLayout(gridSC),
+                new H3("Szakmai tapasztalat"), new HorizontalLayout(refreshW, munkahozz), new HorizontalLayout(gridW),
+                new H3("Motivációs levél"), new HorizontalLayout(motivacioslevel),
                 actions));
         szemelyesComp.setVisible(true);
         add(szemelyesComp);
 
 
-
-        refresh.addClickListener(e->{
+        refresh.addClickListener(e -> {
             jelenlegiID = personRepository.getOne(person.getId()).getId();
             gridL.setItems(filterLang(jelenlegiID.toString()));
 
         });
-        refreshW.addClickListener(e->{
+        refreshW.addClickListener(e -> {
             jelenlegiID = personRepository.getOne(person.getId()).getId();
             gridW.setItems(filterWork(jelenlegiID.toString()));
 
         });
-        refreshS.addClickListener(e->{
+        refreshS.addClickListener(e -> {
             jelenlegiID = personRepository.getOne(person.getId()).getId();
             gridS.setItems(filterSK(jelenlegiID.toString()));
         });
-        refreshSC.addClickListener(e->{
+        refreshSC.addClickListener(e -> {
             jelenlegiID = personRepository.getOne(person.getId()).getId();
             gridSC.setItems(filterSc(jelenlegiID.toString()));
         });
@@ -200,7 +191,7 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier {
         //region MUNKAHELY FUNKCIÓGOMBOK ÉS GRID
         gridW.setHeight("200px");
         gridW.setWidth("800px");
-        gridW.setColumns("munkahelyneve", "beosztas","kezdeseve", "zaraseve");
+        gridW.setColumns("munkahelyneve", "beosztas", "kezdeseve", "zaraseve");
         gridW.asSingleSelect().addValueChangeListener(e -> {
             workingEditor.wcomp.open();
             workingEditor.editWorking(e.getValue());
@@ -208,7 +199,7 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier {
         });
         munkahozz.addClickListener(e -> {
             workingEditor.wcomp.open();
-            workingEditor.editWorking(new Working(personRepository.getOne(person.getId()).getId(), "","","","","", LocalDate.now().toString()));
+            workingEditor.editWorking(new Working(personRepository.getOne(person.getId()).getId(), "", "", "", "", "", LocalDate.now().toString()));
         });
 
         workingEditor.setChangeHandler(() -> {
@@ -227,7 +218,7 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier {
         });
         skillhozz.addClickListener(e -> {
             skillsEditor.scomp.open();
-            skillsEditor.editSkill(new Skills(personRepository.getOne(person.getId()).getId(), "","", LocalDate.now().toString()));
+            skillsEditor.editSkill(new Skills(personRepository.getOne(person.getId()).getId(), "", "", LocalDate.now().toString()));
         });
 
         skillsEditor.setChangeHandler(() -> {
@@ -238,7 +229,7 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier {
         //region ISKOLA FUNKCIÓGOMBOK ÉS GRID
         gridSC.setHeight("200px");
         gridSC.setWidth("800px");
-        gridSC.setColumns("iskolaneve", "kepzetseg","szakirany", "kezdeseve","vegzeseve");
+        gridSC.setColumns("iskolaneve", "kepzetseg", "szakirany", "kezdeseve", "vegzeseve");
         gridSC.asSingleSelect().addValueChangeListener(e -> {
             schoolsEditor.sccomp.open();
             schoolsEditor.editSchool(e.getValue());
@@ -246,7 +237,7 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier {
         });
         schoolhozz.addClickListener(e -> {
             schoolsEditor.sccomp.open();
-            schoolsEditor.editSchool(new School(personRepository.getOne(person.getId()).getId(), "","","","","", LocalDate.now().toString()));
+            schoolsEditor.editSchool(new School(personRepository.getOne(person.getId()).getId(), "", "", "", "", "", LocalDate.now().toString()));
         });
 
         schoolsEditor.setChangeHandler(() -> {
@@ -263,14 +254,43 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier {
         savedialog.add(new Text("Dokumentum mentése sikeresen megtörtént!"));
         savedialog.setWidth("380px");
         savedialog.setHeight("80px");
-        save.addClickListener(e -> { save(); savedialog.open(); szemelyesComp.close(); gridS.setItems(); gridSC.setItems();;gridW.setItems();;gridL.setItems();});
+        save.addClickListener(e -> {
+            save();
+            savedialog.open();
+            szemelyesComp.close();
+            gridS.setItems();
+            gridSC.setItems();
+            ;
+            gridW.setItems();
+            ;
+            gridL.setItems();
+        });
 
         Dialog deletedialog = new Dialog();
         deletedialog.add(new Text("Adatsor törlése sikeresen megtörtént!"));
         deletedialog.setWidth("380px");
         deletedialog.setHeight("80px");
-        delete.addClickListener(e -> { delete(); deletedialog.open(); szemelyesComp.close(); gridS.setItems(); gridSC.setItems();;gridW.setItems();;gridL.setItems();});
-        cancel.addClickListener(e -> { editPerson(person); szemelyesComp.close(); gridS.setItems(); gridSC.setItems();;gridW.setItems();;gridL.setItems();});
+        delete.addClickListener(e -> {
+            delete();
+            deletedialog.open();
+            szemelyesComp.close();
+            gridS.setItems();
+            gridSC.setItems();
+            ;
+            gridW.setItems();
+            ;
+            gridL.setItems();
+        });
+        cancel.addClickListener(e -> {
+            editPerson(person);
+            szemelyesComp.close();
+            gridS.setItems();
+            gridSC.setItems();
+            ;
+            gridW.setItems();
+            ;
+            gridL.setItems();
+        });
 
         //region Képhez tartolzó funkciógombok
         /**
@@ -294,7 +314,8 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier {
         });
         //endregion
     }
-    public void data(){
+
+    public void data() {
         jelenlegiID = personRepository.getOne(person.getId()).getId();
         gridL.setItems(filterLang(jelenlegiID.toString()));
         jelenlegiID = personRepository.getOne(person.getId()).getId();
@@ -347,13 +368,14 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier {
                     filtered.add(l);
                 }
             }
-            if(filtered.isEmpty()){
+            if (filtered.isEmpty()) {
 
                 System.out.println("Nem található nyelvi adatok a rendszerben!");
 
             } else {
                 return filtered;
-            }                return filtered;
+            }
+            return filtered;
 
         }
     }
@@ -373,13 +395,14 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier {
                     filtered.add(sc);
                 }
             }
-            if(filtered.isEmpty()){
+            if (filtered.isEmpty()) {
 
                 System.out.println("Nem található iskolai adatok a rendszerben!");
 
             } else {
                 return filtered;
-            }                return filtered;
+            }
+            return filtered;
 
         }
     }
@@ -399,7 +422,7 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier {
                     filtered.add(w);
                 }
             }
-            if(filtered.isEmpty()){
+            if (filtered.isEmpty()) {
 
                 System.out.println("Nem található szakmai tapasztalati adatok a rendszerben!");
             } else {
@@ -426,7 +449,7 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier {
                     filtered.add(sk);
                 }
             }
-            if(filtered.isEmpty()){
+            if (filtered.isEmpty()) {
 
                 System.out.println("Nem található skill adatok a rendszerben!");
 
@@ -446,12 +469,11 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier {
         return false;
     }
 
-    public void setChangeHandler(ChangeHandler h) { changeHandler = h; }
-    public interface ChangeHandler {  void onChange(); }
-
-
-
-     //region Képfeltöltés
+    public void setChangeHandler(ChangeHandler h) {
+        changeHandler = h;
+    }
+    private static Logger logger = Logger.getLogger(PersonEditor.class.getName());
+    //region Képfeltöltés
     private com.vaadin.flow.component.Component createComponent(String mimeType, String fileName, InputStream stream) {
         if (mimeType.startsWith("image")) {
             return createTextComponent(stream);
@@ -478,7 +500,8 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier {
                     }
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+
+                logger.info(e.getLocalizedMessage());
             }
             image.setSizeFull();
             return image;
@@ -506,6 +529,10 @@ public class PersonEditor extends VerticalLayout implements KeyNotifier {
         p.getElement().setText(text);
         outputContainer.add(p);
         outputContainer.add((com.vaadin.flow.component.Component) content);
+    }
+
+    public interface ChangeHandler {
+        void onChange();
     }
     //endregion
 }

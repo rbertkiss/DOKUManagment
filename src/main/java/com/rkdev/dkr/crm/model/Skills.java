@@ -7,18 +7,18 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-public class Skills implements Serializable, Cloneable{
+public class Skills implements Serializable, Cloneable {
 
     @Id
     @GeneratedValue
     private Long id;
     private Long ids;
 
-    private String megnevezes="";
-    private String tudasszint="";
+    private String megnevezes = "";
+    private String tudasszint = "";
     private String rogzitesdatuma;
 
-    public Skills(){
+    public Skills() {
 
     }
 
