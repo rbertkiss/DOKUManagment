@@ -1,5 +1,5 @@
 <h1>Információk</h1>
-<table>
+<table width="100%">
 <tr>
 <td>Verzió:</td>
 <td><strong style="color:green">1.1-SNAPSHOT</strong></td>
