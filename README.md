@@ -1,4 +1,4 @@
-#Információk
+<h1>Információk</h1>
 <table>
 <tr>
 <td>Verzió:</td>
